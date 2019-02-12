@@ -40,9 +40,7 @@ var wasteData = {
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 	maxZoom: 18,
-	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	attribution: 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	id: 'mapbox.light'
 }).addTo(map);
 
@@ -58,8 +56,33 @@ info.onAdd = function (map) {
 
 info.update = function (props) {
 	this._div.innerHTML = '<h4>State statistics</h4>' +  (props ?
-		'<b>' + props.NAME_1 + '</b><br />Waste production: ' + wasteData[props.ID_1] + ' m<sup>3</sup>/hh/wk'
+		'<b>' + props.NAME_1 + '</b><br />Total waste production: ' + wasteData[props.ID_1] + ' m<sup>3</sup>/hh/wk' + '<canvas id="pieChart"></canvas>'
         : 'Hover over a state');
+
+    if(props){
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'pie',
+
+            // The data for our dataset
+            data: {
+                labels: ["PET", "Aluminium", "Glass"],
+                datasets: [{
+                    // label: "My First dataset",
+                    backgroundColor: ['#e5f5f9', '#99d8c9', '#2ca25f'],
+                    // borderColor: 'rgb(255, 99, 132)',
+                    data: [5, 10, 2],
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
 };
 
 info.addTo(map);
